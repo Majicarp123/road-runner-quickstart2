@@ -15,9 +15,16 @@ import com.qualcomm.robotcore.util.Range;
 public class TestChains extends LinearOpMode {
 
     // Declare OpMode members.
+
+    private double leftServoOpen;
+    private double leftServoClosed1;
+    private double leftServoClosed2;
+    private double rightServoOpen;
+    private double rightServoClosed1;
+    private double rightServoClosed2;
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor frontRight, frontLeft, rearRight, rearLeft, chainMotor;
-    Servo airplaneLift, airplaneLaunch;
+    Servo airplaneLift, airplaneLaunch, servoLeft, servoRight;
     Gamepad prevPad1 = new Gamepad();
     public void initMotors()
     {
@@ -35,14 +42,21 @@ public class TestChains extends LinearOpMode {
     {
         airplaneLift = hardwareMap.get(Servo.class, "planeLift");
         airplaneLaunch = hardwareMap.get(Servo.class, "planeLaunch");
+        servoLeft = hardwareMap.get(Servo.class, "servoLeft");
+
+        servoRight = hardwareMap.get(Servo.class, "servoRight");
+        // I'm just putting this because one of them has to be reversed. It might be the left one.
+        servoRight.setDirection(Servo.Direction.REVERSE);
     }
     
 
     @Override
     public void runOpMode() {
-        // Wait for the game to start (driver presses PLAY)
+        // init everything
         initMotors();
         initServos();
+
+        // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
@@ -67,10 +81,14 @@ public class TestChains extends LinearOpMode {
 
             chainMotor.setPower(gamepad1.right_stick_y);
 
+            // this makes it only run once per button press
             if (gamepad1.a && !prevPad1.a)
-                airplaneLift.setPosition((airplaneLift.getPosition() == 1) ? 0 : 1);
-            if (gamepad1.b && !prevPad1.a && airplaneLift.getPosition() == 1)
+                airplaneLift.setPosition((airplaneLift.getPosition() == 1) ? 0 : 1); // sets the position to either lifted up or down
+            // only runs if the airplane lift is up
+            if (gamepad1.b && !prevPad1.b && airplaneLift.getPosition() == 1)
                 airplaneLaunch.setPosition(1);
+
+
 
             prevPad1.copy(gamepad1);
         }
