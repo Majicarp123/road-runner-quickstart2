@@ -16,15 +16,18 @@ public class TestChains extends LinearOpMode {
 
     // Declare OpMode members.
 
-    private double leftServoOpen;
-    private double leftServoClosed1;
-    private double leftServoClosed2;
-    private double rightServoOpen;
-    private double rightServoClosed1;
-    private double rightServoClosed2;
+    private final double leftServoOpen = 1;
+    private final double leftServoClosed1 = .4;
+    private final double leftServoClosed2 = .25;
+    private final double rightServoOpen = 1;
+    private final double rightServoClosed1 = .4;
+    private final double rightServoClosed2 = .25;
+    private boolean clawClosed = false;
+
+
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor frontRight, frontLeft, rearRight, rearLeft, chainMotor;
-    Servo airplaneLift, airplaneLaunch, servoLeft, servoRight;
+    Servo airplaneLift, airplaneLaunch, clawLeft, clawRight;
     Gamepad prevPad1 = new Gamepad();
     public void initMotors()
     {
@@ -42,13 +45,37 @@ public class TestChains extends LinearOpMode {
     {
         airplaneLift = hardwareMap.get(Servo.class, "planeLift");
         airplaneLaunch = hardwareMap.get(Servo.class, "planeLaunch");
-        servoLeft = hardwareMap.get(Servo.class, "servoLeft");
+        clawLeft = hardwareMap.get(Servo.class, "servoLeft");
 
-        servoRight = hardwareMap.get(Servo.class, "servoRight");
+        clawRight = hardwareMap.get(Servo.class, "servoRight");
         // I'm just putting this because one of them has to be reversed. It might be the left one.
-        servoRight.setDirection(Servo.Direction.REVERSE);
+        clawRight.setDirection(Servo.Direction.REVERSE);
     }
-    
+    void handleClaw()
+    {
+        if (gamepad1.right_bumper && !prevPad1.right_bumper)
+        {
+            if (clawClosed)
+            {
+                clawLeft.setPosition(leftServoOpen);
+                clawRight.setPosition(rightServoOpen);
+                clawClosed = false;
+                return;
+            }
+            // if holding left bumper
+            if (gamepad1.left_bumper) {
+                clawLeft.setPosition(leftServoClosed2);
+                clawRight.setPosition(rightServoClosed2);
+            }
+            // if not
+            else {
+                clawLeft.setPosition(leftServoClosed1);
+                clawRight.setPosition(rightServoClosed1);
+            }
+            clawClosed = true;
+            return;
+        }
+    }
 
     @Override
     public void runOpMode() {
@@ -88,7 +115,7 @@ public class TestChains extends LinearOpMode {
             if (gamepad1.b && !prevPad1.b && airplaneLift.getPosition() == 1)
                 airplaneLaunch.setPosition(1);
 
-
+            handleClaw();
 
             prevPad1.copy(gamepad1);
         }
