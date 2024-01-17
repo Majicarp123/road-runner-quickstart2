@@ -73,7 +73,6 @@ public class TestChains extends LinearOpMode {
                 clawRight.setPosition(rightServoClosed1);
             }
             clawClosed = true;
-            return;
         }
     }
 
