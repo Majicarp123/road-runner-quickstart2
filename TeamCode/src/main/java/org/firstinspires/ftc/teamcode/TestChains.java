@@ -45,6 +45,11 @@ public class TestChains extends OpMode {
         armMotor = hardwareMap.get(DcMotor.class, "arm");
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        frontRight.setPower(0);
+        frontLeft.setPower(0);
+        rearLeft.setPower(0);
+        rearRight.setPower(0);
     }
     void handleClaw()
     {
@@ -92,7 +97,8 @@ public class TestChains extends OpMode {
         power = Range.clip(drive + strafe - rotation, -1, 1);
         rearRight.setPower(power);
 
-        armMotor.setPower(gamepad1.right_stick_y);
+        double armPower = Range.clip(gamepad2.right_stick_y, -1, 1);
+        armMotor.setPower(armPower);
 
         // this makes it only run once per button press
         if (gamepad2.a && !prevPad2.a)
