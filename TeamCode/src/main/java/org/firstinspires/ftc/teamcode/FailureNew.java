@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -7,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import com.qualcomm.robotcore.util.Range;
 
 
 @Autonomous(preselectTeleOp = "Failure")
@@ -24,6 +26,46 @@ public class FailureNew extends LinearOpMode {
     public int rotate = 0;
     private ElapsedTime runtime = new ElapsedTime();
     private Gamepad prevPad1 = new Gamepad();
+
+    public void runForTime(double time, double drive, double strafe, double rotation)
+    {
+        ElapsedTime lRuntime = new ElapsedTime();
+        boolean finished = false;
+
+        double power;
+        // front right
+        power = Range.clip(drive - strafe - rotation, -1, 1);
+        frontRight.setPower(power);
+        // front left
+        power = Range.clip(drive + strafe + rotation, -1, 1);
+        frontLeft.setPower(power);
+        // rear left
+        power = Range.clip(drive - strafe + rotation, -1, 1);
+        rearLeft.setPower(power);
+        // rear right
+        power = Range.clip(drive + strafe - rotation, -1, 1);
+        rearRight.setPower(power);
+
+        lRuntime.reset();
+        while (!finished && opModeIsActive())
+        {
+            double eTime = lRuntime.seconds();
+
+            if (eTime >= time)
+            {
+                finished = true;
+
+                frontRight.setPower(0);
+                frontLeft.setPower(0);
+                rearRight.setPower(0);
+                rearLeft.setPower(0);
+            }
+
+            telemetry.addData("Elapsed Time: ", runtime.seconds());
+            telemetry.update();
+        }
+    }
+
 
     public void runOpMode()
     {
@@ -68,22 +110,7 @@ public class FailureNew extends LinearOpMode {
         runtime.reset();
         while (opModeIsActive())
         {
-
-            if (!finished)
-            {
-                double time = runtime.seconds();
-                if (time >= ((runLong) ? timeToRunLong : timeToRunShort))
-                {
-                    finished = true;
-
-                    frontRight.setPower(0);
-                    frontLeft.setPower(0);
-                    rearRight.setPower(0);
-                    rearLeft.setPower(0);
-                }
-            }
-
-            telemetry.addData("Elapsed Time: ", runtime.seconds());
+           runForTime((runLong) ? timeToRunLong : timeToRunShort, 1, 0, 0);
         }
     }
 }
