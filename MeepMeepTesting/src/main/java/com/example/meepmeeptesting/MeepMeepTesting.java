@@ -1,5 +1,6 @@
 package com.example.meepmeeptesting;
 
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
@@ -72,12 +73,12 @@ public class MeepMeepTesting {
             case SPEED_TEST:
                 myBot = speedTest(meepMeep);
                 break;
-            case PARK_LEFT:
-                myBot = parkLeft(meepMeep);
-                break;
-            case PARK_RIGHT:
-                myBot = parkRight(meepMeep);
-                break;
+           // case PARK_LEFT:
+                //myBot = parkLeft(meepMeep);
+                //break;
+            //case PARK_RIGHT:
+                //myBot = parkRight(meepMeep);
+               // break;
             default:
                 throw new Exception("unrecognized route");
         }
@@ -377,18 +378,18 @@ public class MeepMeepTesting {
         return myBot;
     }
 
-    private static RoadRunnerBotEntity parkRight(MeepMeep meepMeep) {
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(MAXVEL, MAXACCEL, MAXANGVEL, MAXANGACCEL, TRACKWIDTH)
+    //private static RoadRunnerBotEntity parkRight(MeepMeep meepMeep) { RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+    //                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+    //                .setConstraints(MAXVEL, MAXACCEL, MAXANGVEL, MAXANGACCEL, TRACKWIDTH)
+    //
+    //                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-35, 50, Math.toRadians(90)))
+    //                        .strafeRight(24)
+    //                        .forward(10)
+    //                        .build()
+    //                );
+    //        return myBot;
 
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-35, 50, Math.toRadians(90)))
-                        .strafeRight(24)
-                        .forward(10)
-                        .build()
-                );
-        return myBot;
-    }
+   // }
 
 }
 
