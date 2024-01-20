@@ -12,7 +12,8 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="CMecanumDrive")
 public class CMecanumDrive extends OpMode {
-    private boolean clawClosed = false;
+    public boolean clawClosed = false;
+    public double maxPower = .5;
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor frontRight, frontLeft, rearRight, rearLeft, armMotor;
     Servo launchArm, launchRelease, clawLeft, clawRight;
@@ -30,6 +31,8 @@ public class CMecanumDrive extends OpMode {
         clawLeft = hardwareMap.get(Servo.class, "clawLeft");
         clawRight = hardwareMap.get(Servo.class, "clawRight");
         clawLeft.setDirection(Servo.Direction.REVERSE);
+        clawLeft.setPosition(0);
+        clawRight.setPosition(.1);
 
         frontRight = hardwareMap.get(DcMotor.class, "frontRightMotor");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeftMotor");
@@ -59,19 +62,19 @@ public class CMecanumDrive extends OpMode {
             if (clawClosed)
             {
                 clawLeft.setPosition(0);
-                clawRight.setPosition(0);
+                clawRight.setPosition(.1);
                 clawClosed = false;
                 return;
             }
             // if holding left bumper, it closes to size for 2 pixels
             if (gamepad2.left_bumper) {
-                clawLeft.setPosition(.6);
-                clawRight.setPosition(.4);
+                clawLeft.setPosition(.1);
+                clawRight.setPosition(.2);
             }
             // if not, close to the max
             else {
-                clawLeft.setPosition(1);
-                clawRight.setPosition(0);
+                clawLeft.setPosition(.3);
+                clawRight.setPosition(.4);
             }
             clawClosed = true;
         }
@@ -96,7 +99,10 @@ public class CMecanumDrive extends OpMode {
         power = Range.clip(drive + strafe - rotation, -1, 1);
         rearRight.setPower(power);
 
-        double armPower = Range.clip(gamepad2.right_stick_y, -1, 1);
+        if (gamepad2.right_stick_button && !prevPad2.right_stick_button)
+            maxPower = (maxPower == 1) ? .5 : 1;
+
+        double armPower = Range.clip(-(gamepad2.right_stick_y), -(maxPower / 2), maxPower);
         armMotor.setPower(armPower);
 
         // this makes it only run once per button press
@@ -104,11 +110,20 @@ public class CMecanumDrive extends OpMode {
             launchArm.setPosition((launchArm.getPosition() == 1) ? 0 : 1); // sets the position to either lifted up or down
         // only runs if the airplane lift is up
         if (gamepad2.b && !prevPad2.b && launchArm.getPosition() == 1)
-            launchRelease.setPosition(1);
+            launchRelease.setPosition((launchRelease.getPosition() == 1) ? 0 : 1);
 
         handleClaw();
         prevPad1.copy(gamepad1);
         prevPad2.copy(gamepad2);
+
+        telemetry.addData("Front Right Power: ", frontRight.getPower());
+        telemetry.addData("Front Left Power: ", frontLeft.getPower());
+        telemetry.addData("Rear Left Power: ", rearLeft.getPower());
+        telemetry.addData("Rear Right Power: ", rearRight.getPower());
+        telemetry.addData("Arm Motor Power: ", armMotor.getPower());
+        telemetry.addData("Claw Left Position: ", clawLeft.getPosition());
+        telemetry.addData("Claw Right Position: ", clawRight.getPosition());
+        telemetry.addData("Max Arm Power: ", maxPower);
     }
     @Override
     public void stop()
