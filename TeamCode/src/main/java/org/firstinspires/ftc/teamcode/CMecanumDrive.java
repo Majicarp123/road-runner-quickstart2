@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="CMecanumDrive")
 public class CMecanumDrive extends OpMode {
-    public boolean clawClosed = false;
+    public boolean clawClosed = true;
     public double maxPower = .5;
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor frontRight, frontLeft, rearRight, rearLeft, armMotor;
@@ -31,8 +31,8 @@ public class CMecanumDrive extends OpMode {
         clawLeft = hardwareMap.get(Servo.class, "clawLeft");
         clawRight = hardwareMap.get(Servo.class, "clawRight");
         clawLeft.setDirection(Servo.Direction.REVERSE);
-        clawLeft.setPosition(0);
-        clawRight.setPosition(.1);
+        clawLeft.setPosition(.35);
+        clawRight.setPosition(.4);
 
         frontRight = hardwareMap.get(DcMotor.class, "frontRightMotor");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeftMotor");

@@ -21,6 +21,7 @@ public class FailureAutonomous2 extends LinearOpMode {
     public double timeToRunShort = 4.6 / 2;
     public double timeToRunLong = 4.6;
     public boolean runLong;
+    public boolean leftSide = false;
     public boolean clawClosed = false;
     private ElapsedTime runtime = new ElapsedTime();
     private Gamepad prevPad1 = new Gamepad();
@@ -71,8 +72,8 @@ public class FailureAutonomous2 extends LinearOpMode {
             clawClosed = false;
         } else
         {
-            clawLeft.setPosition(.155);
-            clawRight.setPosition(.255);
+            clawLeft.setPosition(.35);
+            clawRight.setPosition(.4);
             clawClosed = true;
         }
     }
@@ -103,16 +104,22 @@ public class FailureAutonomous2 extends LinearOpMode {
             else if (gamepad1.left_bumper)
                 runLong = false;
 
+            if (gamepad1.b && !prevPad1.b)
+                toggleClaw();
+
+            if (gamepad1.y && !prevPad1.y)
+                leftSide = !leftSide;
+
             if (gamepad1.start && gamepad1.a && !prevPad1.a && clawClosed)
                 confirmed = true;
 
-            if (gamepad1.b && !prevPad1.b)
-                toggleClaw();
+
 
 
 
             telemetry.addData("Travel Long? ", runLong);
             telemetry.addData("Claw Closed? ", clawClosed);
+            telemetry.addData("Left Side? ", leftSide);
             telemetry.addData("Confirmed? ", confirmed);
             telemetry.update();
 
@@ -137,7 +144,7 @@ public class FailureAutonomous2 extends LinearOpMode {
 
         if (runLong)
         {
-            runForTime(.5, 0, -1, 0);
+            runForTime(.15, 0, (leftSide) ? 1 : -1, 0);
             sleep(750);
             runForTime(timeToRunLong, 1, 0, 0);
         } else
