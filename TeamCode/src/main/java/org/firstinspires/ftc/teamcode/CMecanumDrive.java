@@ -26,7 +26,7 @@ public class CMecanumDrive extends OpMode {
         launchArm = hardwareMap.get(Servo.class, "launchArm");
         launchArm.setPosition(.5);
         launchRelease = hardwareMap.get(Servo.class, "launchRelease");
-        launchRelease.setPosition(.5);
+        launchRelease.setPosition(.7);
 
         clawLeft = hardwareMap.get(Servo.class, "clawLeft");
         clawRight = hardwareMap.get(Servo.class, "clawRight");
@@ -83,9 +83,9 @@ public class CMecanumDrive extends OpMode {
     @Override
     public void loop() {
        float drive, strafe, rotation, power;
-       drive = gamepad1.left_stick_y;
+       drive = -gamepad1.left_stick_y;
        strafe = gamepad1.left_stick_x;
-       rotation = gamepad1.right_stick_x;
+       rotation = -gamepad1.right_stick_x;
        // front right
         power = Range.clip(drive - strafe - rotation, -1, 1);
         frontRight.setPower(power);
@@ -124,6 +124,9 @@ public class CMecanumDrive extends OpMode {
         telemetry.addData("Claw Left Position: ", clawLeft.getPosition());
         telemetry.addData("Claw Right Position: ", clawRight.getPosition());
         telemetry.addData("Max Arm Power: ", maxPower);
+        telemetry.addData("Drive: ", drive);
+        telemetry.addData("Strafe: ", strafe);
+        telemetry.addData("Rotation: ", rotation);
     }
     @Override
     public void stop()
