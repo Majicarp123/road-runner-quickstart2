@@ -34,10 +34,6 @@ public class FailureAutonomous extends OpMode {
 
     @Override
     public void start() {
-    frontRight.setPower(0); 
-        frontLeft.setPower(0);
-        rearLeft.setPower(0);
-        rearRight.setPower(0);
 
         frontLeft.setPower(frontLeftPower); //will's stuff
         frontRight.setPower(frontRightPower);
@@ -56,10 +52,10 @@ public class FailureAutonomous extends OpMode {
             {
                 //finished = true;
 
-                frontRight.setPower(1);
-                frontLeft.setPower(1);
-                rearRight.setPower(1);
-                rearLeft.setPower(1);
+                frontRight.setPower(0);
+                frontLeft.setPower(0);
+                rearRight.setPower(0);
+                rearLeft.setPower(0);
             }
         }
 
