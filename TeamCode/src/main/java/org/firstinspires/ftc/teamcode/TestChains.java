@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="TestChains")
+@TeleOp(name="CameronOpMode")
 @Disabled
 public class TestChains extends OpMode {
     private boolean clawClosed = false;
