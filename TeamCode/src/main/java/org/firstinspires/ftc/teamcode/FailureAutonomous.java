@@ -10,7 +10,7 @@ public class FailureAutonomous extends OpMode {
 
     public DcMotor frontLeft, frontRight, rearLeft, rearRight;
     public boolean finished = false;
-    public double timeToRun = 10;
+    public double timeToRun = 2; //4.85 for 8ft
     private ElapsedTime runtime = new ElapsedTime();
     @Override
     public void init()
@@ -23,10 +23,10 @@ public class FailureAutonomous extends OpMode {
 
     @Override
     public void start() {
-        frontRight.setPower(1);
-        frontLeft.setPower(1);
-        rearLeft.setPower(1);
-        rearRight.setPower(1);
+        frontRight.setPower(0,1);
+        frontLeft.setPower(0,1);
+        rearLeft.setPower(0,1);
+        rearRight.setPower(0,1);
         runtime.reset();
     }
 
@@ -40,10 +40,10 @@ public class FailureAutonomous extends OpMode {
             {
                 finished = true;
 
-                frontRight.setPower(0);
-                frontLeft.setPower(0);
-                rearRight.setPower(0);
-                rearLeft.setPower(0);
+                frontRight.setPower(0,0);
+                frontLeft.setPower(0,0);
+                rearRight.setPower(0,0);
+                rearLeft.setPower(0,0);
             }
         }
 
