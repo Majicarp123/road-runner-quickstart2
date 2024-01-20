@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="CameronOpMode")
+@TeleOp(name="CMecanumDrive")
 @Disabled
-public class TestChains extends OpMode {
+public class CMecanumDrive extends OpMode {
     private boolean clawClosed = false;
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor frontRight, frontLeft, rearRight, rearLeft, armMotor;
