@@ -1,109 +1,62 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.openftc.easyopencv.OpenCvWebcam;
+@Autonomous(name="RightBlue", group="AutoOpModes")
+public class AutoE extends LinearOpMode
+{
 
-enum Route {
-    RED_LEFT_DIRECT,
-    RED_LEFT_INDIRECT,
-    RED_RIGHT_DIRECT,
-    RED_RIGHT_INDIRECT,
-    BLUE_LEFT_DIRECT,
-    BLUE_LEFT_INDIRECT,
-    BLUE_RIGHT_DIRECT,
-    BLUE_RIGHT_INDIRECT,
-    PARK_LEFT,
-    PARK_RIGHT
-
-}
-
-@Autonomous(preselectTeleOp = "TeleOpA")
-//@Disabled
-public class AutoE extends LinearOpMode {
+    public boolean clawClosed = false;
+    public double maxPower = .5;
+    private ElapsedTime runtime = new ElapsedTime();
+    DcMotor frontRight, frontLeft, rearRight, rearLeft, armMotor;
+    Servo  clawLeft, clawRight;
 
 
-    public static final Vector2d RED_LEFT_START = new Vector2d(-36, -61);
-    public static final Vector2d RED_RIGHT_START = new Vector2d(12, -61);
-    public static final Vector2d RED_RIGHT_LEFT_POSITION = new Vector2d(14, -30);
-    public static final Vector2d RED_RIGHT_RIGHT_POSITION = new Vector2d(23, -30);
+    {
 
 
-    public static final Vector2d BLUE_LEFT_START = new Vector2d(12, 61);
-    public static final Vector2d BLUE_RIGHT_START = new Vector2d(-36, 61);
-    public static final Vector2d BLUE_RIGHT_LEFT_POSITION = new Vector2d(23, 30);
-    public static final Vector2d BLUE_RIGHT_RIGHT_POSITION = new Vector2d(14, 30);
+        clawLeft = hardwareMap.get(Servo.class, "clawLeft");
+        clawRight = hardwareMap.get(Servo.class, "clawRight");
+        clawLeft.setDirection(Servo.Direction.REVERSE);
+        clawLeft.setPosition(0);
+        clawRight.setPosition(.1);
 
-    private Boolean redAlliance = null;
-    private Boolean startLeft = null;
-    private Boolean parkLeft = null;
+        frontRight = hardwareMap.get(DcMotor.class, "frontRightMotor");
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeftMotor");
+        rearRight = hardwareMap.get(DcMotor.class, "rearRightMotor");
+        rearLeft = hardwareMap.get(DcMotor.class, "rearLeftMotor");
 
-    OpenCvWebcam camera;
-    private boolean startedStreaming;
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        rearLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        armMotor = hardwareMap.get(DcMotor.class, "arm");
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-    public static final Route ROUTE = Route.RED_LEFT_DIRECT;
-    public static final double DELAY = 0.5;
-
-    @Override
-    public void runOpMode() {
-        Gamepad previousGamepad = new Gamepad();
-        Gamepad currentGamepad = new Gamepad();
-
-        while (true) {
-            previousGamepad.copy(currentGamepad);
-            currentGamepad.copy(gamepad1);
-
-            if (redAlliance == null) {
-                telemetry.addData("Alliance", "X = blue, B = red");
-                telemetry.update();
-                if (currentGamepad.x && !previousGamepad.x) {
-                    redAlliance = false;
-                }
-                if (currentGamepad.b && !previousGamepad.b) {
-                    redAlliance = true;
-                }
-            } else if (startLeft == null) {
-                telemetry.addData("Start", "X = left, B = right");
-                telemetry.update();
-                if (currentGamepad.x && !previousGamepad.x) {
-                    startLeft = true;
-                }
-                if (currentGamepad.b && !previousGamepad.b) {
-                    startLeft = false;
-                }
-            } else if (parkLeft == null) {
-                telemetry.addData("Park", "X = left, B = right");
-                telemetry.update();
-                if (currentGamepad.x && !previousGamepad.x) {
-                    parkLeft = true;
-                }
-                if (currentGamepad.b && !previousGamepad.b) {
-                    parkLeft = false;
-                }
-            } else {
-                break;
-            }
-        }
-
-
+        frontRight.setPower(0);
+        frontLeft.setPower(0);
+        rearLeft.setPower(0);
+        rearRight.setPower(0);
     }
 
 
-    //red left park left
-    //red left park right
-    //red right park right
-    //red right park left
+    @Override
+    public void runOpMode() throws InterruptedException {
 
-
-// Blue
-//blue left park right
-    //blue left park left
-    //blue right park right
-    //blue right park left
-
+    }
 }
+
+
+
 
