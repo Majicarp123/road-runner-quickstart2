@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="CMecanumDrive")
-@Disabled
 public class CMecanumDrive extends OpMode {
     private boolean clawClosed = false;
     private ElapsedTime runtime = new ElapsedTime();
@@ -32,10 +31,10 @@ public class CMecanumDrive extends OpMode {
         clawRight = hardwareMap.get(Servo.class, "clawRight");
         clawLeft.setDirection(Servo.Direction.REVERSE);
 
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        rearRight = hardwareMap.get(DcMotor.class, "rearRight");
-        rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRightMotor");
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeftMotor");
+        rearRight = hardwareMap.get(DcMotor.class, "rearRightMotor");
+        rearLeft = hardwareMap.get(DcMotor.class, "rearLeftMotor");
 
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         rearLeft.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -54,7 +53,7 @@ public class CMecanumDrive extends OpMode {
     void handleClaw()
     {
         // right bumper gets pressed
-        if (gamepad1.right_bumper && !prevPad1.right_bumper)
+        if (gamepad2.right_bumper && !prevPad2.right_bumper)
         {
             // the claw is already closed, so it opens
             if (clawClosed)
@@ -65,7 +64,7 @@ public class CMecanumDrive extends OpMode {
                 return;
             }
             // if holding left bumper, it closes to size for 2 pixels
-            if (gamepad1.left_bumper) {
+            if (gamepad2.left_bumper) {
                 clawLeft.setPosition(.6);
                 clawRight.setPosition(.4);
             }
