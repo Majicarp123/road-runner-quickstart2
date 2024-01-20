@@ -12,8 +12,8 @@ public class MecanumDriveWithServoOpMode extends OpMode {
 
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
-    private DcMotor backRightMotor;
-    private DcMotor backLeftMotor;
+    private DcMotor rearRightMotor;
+    private DcMotor rearLeftMotor;
     private DcMotor armMotor;
 
     private Servo clawLeft;
@@ -31,12 +31,12 @@ public class MecanumDriveWithServoOpMode extends OpMode {
     public void init() {
         frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
-        backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
-        backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+        rearLeftMotor = hardwareMap.dcMotor.get("rearLeftMotor");
+        rearRightMotor = hardwareMap.dcMotor.get("rearRightMotor");
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         armMotor = hardwareMap.dcMotor.get("arm");
@@ -64,15 +64,15 @@ public class MecanumDriveWithServoOpMode extends OpMode {
 
         double frontLeftPower = Range.clip(drive + strafe + rotate, -1.0, 1.0);
         double frontRightPower = Range.clip(drive - strafe - rotate, -1.0, 1.0);
-        double backLeftPower = Range.clip(drive - strafe + rotate, -1.0, 1.0);
-        double backRightPower = Range.clip(drive + strafe - rotate, -1.0, 1.0);
+        double rearLeftPower = Range.clip(drive - strafe + rotate, -1.0, 1.0);
+        double rearRightPower = Range.clip(drive + strafe - rotate, -1.0, 1.0);
 
 
 
         frontLeftMotor.setPower(frontLeftPower);
         frontRightMotor.setPower(frontRightPower);
-        backLeftMotor.setPower(backLeftPower);
-        backRightMotor.setPower(backRightPower);
+        rearLeftMotor.setPower(rearLeftPower);
+        rearRightMotor.setPower(rearRightPower);
 
         // Control "Arm" motor with left stick of gamepad2
         armMotorPower = Range.clip(gamepad2.left_stick_y, 1.0, - 1.0);
@@ -109,8 +109,8 @@ public class MecanumDriveWithServoOpMode extends OpMode {
 
         telemetry.addData("Front Left Power", frontLeftPower);
         telemetry.addData("Front Right Power", frontRightPower);
-        telemetry.addData("Back Left Power", backLeftPower);
-        telemetry.addData("Back Right Power", backRightPower);
+        telemetry.addData("rear Left Power", rearLeftPower);
+        telemetry.addData("rear Right Power", rearRightPower);
         telemetry.addData("Arm Motor Power", armMotorPower);
         telemetry.addData("ClawLeft Position", clawLeft.getPosition());
         telemetry.addData("ClawRight Position", clawRight.getPosition());
@@ -123,8 +123,8 @@ public class MecanumDriveWithServoOpMode extends OpMode {
     public void stop() {
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
-        backRightMotor.setPower(0);
-        backLeftMotor.setPower(0);
+        rearRightMotor.setPower(0);
+        rearLeftMotor.setPower(0);
         armMotor.setPower(0);
     }
 }
