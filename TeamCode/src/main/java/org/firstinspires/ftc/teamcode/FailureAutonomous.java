@@ -37,10 +37,10 @@ public class FailureAutonomous extends OpMode {
         rearLeft.setPower(0);
         rearRight.setPower(0);
 
-        frontLeftMotor.setPower(frontLeftPower); //will's stuff
-        frontRightMotor.setPower(frontRightPower);
-        rearLeftMotor.setPower(rearLeftPower);
-        rearRightMotor.setPower(rearRightPower);
+        frontLeft.setPower(frontLeftPower); //will's stuff
+        frontRight.setPower(frontRightPower);
+        rearLeaft.setPower(rearLeftPower);
+        rearRight.setPower(rearRightPower);
 
         runtime.reset();
     }
