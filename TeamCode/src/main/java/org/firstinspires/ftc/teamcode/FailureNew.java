@@ -8,22 +8,25 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-@Autonomous(preselectTeleOp = "Failure")
+@Autonomous(preselectTeleOp = "FailureNew")
 public class FailureNew extends LinearOpMode {
 
-    public DcMotor frontLeft, frontRight, rearLeft, rearRight;
+    public DcMotor frontLeft, frontRight, rearLeft, rearRight, armMotor;
+    public Servo clawLeft, clawRight;
     public boolean finished = false;
     public double timeToRun = 2; //4.85 for 8ft drive
     public double timeToRunLong = 4.85;
     public double timeToRunShort = 4.85/2;
+
+    public double spfDrive = (4.85/8);
     public boolean runLong = false;
-    public int drive = 0;
-    public int strafe = 1;
-    public int rotate = 0;
+    public boolean clawClosed = false;
+
     private ElapsedTime runtime = new ElapsedTime();
     private Gamepad prevPad1 = new Gamepad();
 
@@ -65,6 +68,38 @@ public class FailureNew extends LinearOpMode {
             telemetry.update();
         }
     }
+    public void runArmForTime(double time, double power)
+    {
+        ElapsedTime lRuntime = new ElapsedTime();
+        boolean finished = false;
+        armMotor.setPower(power);
+        lRuntime.reset();
+        while (!finished && opModeIsActive()) {
+            double eTime = lRuntime.seconds();
+
+            if (eTime >= time) {
+                finished = true;
+                armMotor.setPower(0);
+            }
+
+            telemetry.addData("Elapsed Time: ", runtime.seconds());
+            telemetry.update();
+        }
+    }
+    void toggleClaw()
+    {
+        if (clawClosed)
+        {
+            clawLeft.setPosition(0);
+            clawRight.setPosition(.1);
+            clawClosed = false;
+        } else
+        {
+            clawLeft.setPosition(.1);
+            clawRight.setPosition(.2);
+            clawClosed = true;
+        }
+    }
 
 
     public void runOpMode()
@@ -74,12 +109,23 @@ public class FailureNew extends LinearOpMode {
         rearLeft = hardwareMap.get(DcMotor.class, "rearLeftMotor");
         rearRight = hardwareMap.get(DcMotor.class, "rearRightMotor");
 
+        armMotor = hardwareMap.get(DcMotor.class, "arm");
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        clawLeft = hardwareMap.get(Servo.class, "clawLeft");
+        clawRight = hardwareMap.get(Servo.class, "clawRight");
+
+        clawLeft.setPosition(0);
+        clawLeft.setDirection(Servo.Direction.REVERSE);
+        clawRight.setPosition(.1);
+
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         rearLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         boolean confirmed = false;
+        boolean pixelLoaded = false;
         while (!confirmed)
         {
             if (gamepad1.right_bumper)
@@ -87,16 +133,23 @@ public class FailureNew extends LinearOpMode {
             else if (gamepad1.left_bumper)
                 runLong = false;
 
-            if (gamepad1.start && gamepad1.a && !prevPad1.a)
+            if (gamepad1.b && !prevPad1.b)
+            {
+                toggleClaw();
+
+                pixelLoaded = !pixelLoaded;
+            }
+
+            if (gamepad1.start && gamepad1.a && !prevPad1.a && pixelLoaded)
                 confirmed = true;
 
             telemetry.addData("Travel Long? ", runLong);
+            telemetry.addData("Pixel loaded? ", pixelLoaded);
             telemetry.addData("Confirmed? ", confirmed);
             telemetry.update();
 
             prevPad1.copy(gamepad1);
         }
-
         telemetry.addLine("Waiting...");
         telemetry.update();
 
@@ -111,6 +164,8 @@ public class FailureNew extends LinearOpMode {
         while (opModeIsActive())
         {
            runForTime((runLong) ? timeToRunLong : timeToRunShort, 1, 0, 0);
+           //runForTime(1, 0, -1, 0);
+           //runArmForTime(1, -.5);
         }
     }
 }

@@ -26,7 +26,7 @@ public class CMecanumDrive extends OpMode {
         launchArm = hardwareMap.get(Servo.class, "launchArm");
         launchArm.setPosition(.5);
         launchRelease = hardwareMap.get(Servo.class, "launchRelease");
-        launchRelease.setPosition(.7);
+        launchRelease.setPosition(1);
 
         clawLeft = hardwareMap.get(Servo.class, "clawLeft");
         clawRight = hardwareMap.get(Servo.class, "clawRight");
@@ -52,6 +52,7 @@ public class CMecanumDrive extends OpMode {
         frontLeft.setPower(0);
         rearLeft.setPower(0);
         rearRight.setPower(0);
+        armMotor.setPower(0);
     }
     void handleClaw()
     {
@@ -68,12 +69,12 @@ public class CMecanumDrive extends OpMode {
             }
             // if holding left bumper, it closes to size for 2 pixels
             if (gamepad2.left_bumper) {
-                clawLeft.setPosition(.1);
-                clawRight.setPosition(.2);
+                clawLeft.setPosition(.155);
+                clawRight.setPosition(.255);
             }
             // if not, close to the max
             else {
-                clawLeft.setPosition(.3);
+                clawLeft.setPosition(.35);
                 clawRight.setPosition(.4);
             }
             clawClosed = true;
@@ -102,7 +103,7 @@ public class CMecanumDrive extends OpMode {
         if (gamepad2.right_stick_button && !prevPad2.right_stick_button)
             maxPower = (maxPower == 1) ? .5 : 1;
 
-        double armPower = Range.clip(-(gamepad2.right_stick_y), -(maxPower / 2), maxPower);
+        double armPower = Range.clip(-(gamepad2.right_stick_y), -(maxPower * .60), maxPower);
         armMotor.setPower(armPower);
 
         // this makes it only run once per button press
@@ -116,17 +117,13 @@ public class CMecanumDrive extends OpMode {
         prevPad1.copy(gamepad1);
         prevPad2.copy(gamepad2);
 
-        telemetry.addData("Front Right Power: ", frontRight.getPower());
-        telemetry.addData("Front Left Power: ", frontLeft.getPower());
-        telemetry.addData("Rear Left Power: ", rearLeft.getPower());
-        telemetry.addData("Rear Right Power: ", rearRight.getPower());
         telemetry.addData("Arm Motor Power: ", armMotor.getPower());
         telemetry.addData("Claw Left Position: ", clawLeft.getPosition());
         telemetry.addData("Claw Right Position: ", clawRight.getPosition());
-        telemetry.addData("Max Arm Power: ", maxPower);
         telemetry.addData("Drive: ", drive);
         telemetry.addData("Strafe: ", strafe);
         telemetry.addData("Rotation: ", rotation);
+        telemetry.addData("Arm Max Power: ", maxPower);
     }
     @Override
     public void stop()
