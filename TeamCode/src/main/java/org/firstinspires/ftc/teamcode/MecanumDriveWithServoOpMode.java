@@ -80,15 +80,15 @@ public class MecanumDriveWithServoOpMode extends OpMode {
 
         // Control "clawLeft" and "clawRight" servos with bumpers
         if (gamepad2.right_bumper) {
-            // Right servo closes while left servo stays open
+            // both open to max position
             clawRight.setPosition(1.0);
             clawLeft.setPosition(0.0);
         } else if (gamepad2.left_bumper) {
-            // Left servo closes while right servo stays open
+            // both close to max position
             clawRight.setPosition(0.0);
             clawLeft.setPosition(1.0);
         } else {
-            // If neither bumper is pressed, keep both servos in the middle position
+            // closed to a medium position (2 pixels)
             clawRight.setPosition(0.4);
             clawLeft.setPosition(0.6);
         }
