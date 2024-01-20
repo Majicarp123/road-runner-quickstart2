@@ -22,6 +22,7 @@ public class FailureAutonomous extends LinearOpMode {
     public boolean runLong;
     private ElapsedTime runtime = new ElapsedTime();
     private Gamepad prevPad1 = new Gamepad();
+
     public void runOpMode()
     {
         frontRight = hardwareMap.get(DcMotor.class, "frontRightMotor");
@@ -65,6 +66,7 @@ public class FailureAutonomous extends LinearOpMode {
         runtime.reset();
         while (opModeIsActive())
         {
+
             if (!finished)
             {
                 double time = runtime.seconds();
