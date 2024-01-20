@@ -10,7 +10,10 @@ public class FailureAutonomous extends OpMode {
 
     public DcMotor frontLeft, frontRight, rearLeft, rearRight;
     public boolean finished = false;
-    public double timeToRun = 2; //4.85 for 8ft
+    public double timeToRun = 2; //4.85 for 8ft drive
+    public int drive = 0;
+    public int strafe = 1;
+    public int rotate = 0;
     private ElapsedTime runtime = new ElapsedTime();
     @Override
     public void init()
@@ -19,14 +22,26 @@ public class FailureAutonomous extends OpMode {
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
         rearRight = hardwareMap.get(DcMotor.class, "rearRight");
+
+        double frontLeftPower = Range.clip(drive + strafe + rotate, -1.0, 1.0); //will's stuff
+        double frontRightPower = Range.clip(drive - strafe - rotate, -1.0, 1.0);
+        double rearLeftPower = Range.clip(drive - strafe + rotate, -1.0, 1.0);
+        double rearRightPower = Range.clip(drive + strafe - rotate, -1.0, 1.0);
+
     }
 
     @Override
     public void start() {
-        frontRight.setPower(0,1);
-        frontLeft.setPower(0,1);
-        rearLeft.setPower(0,1);
-        rearRight.setPower(0,1);
+        frontRight.setPower(0); 
+        frontLeft.setPower(0);
+        rearLeft.setPower(0);
+        rearRight.setPower(0);
+
+        frontLeftMotor.setPower(frontLeftPower); //will's stuff
+        frontRightMotor.setPower(frontRightPower);
+        rearLeftMotor.setPower(rearLeftPower);
+        rearRightMotor.setPower(rearRightPower);
+
         runtime.reset();
     }
 
@@ -40,10 +55,10 @@ public class FailureAutonomous extends OpMode {
             {
                 finished = true;
 
-                frontRight.setPower(0,0);
-                frontLeft.setPower(0,0);
-                rearRight.setPower(0,0);
-                rearLeft.setPower(0,0);
+                frontRight.setPower(0);
+                frontLeft.setPower(0);
+                rearRight.setPower(0);
+                rearLeft.setPower(0);
             }
         }
 
