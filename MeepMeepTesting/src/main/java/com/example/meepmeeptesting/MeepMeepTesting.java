@@ -30,7 +30,7 @@ enum Route {
 
 public class MeepMeepTesting {
 
-    public static final Route ROUTE = Route.BLUE_LEFT_DIRECT;
+    public static final Route ROUTE = Route.BLUE_RIGHT_DIRECT;
     public static final double DELAY = 0.5;
     public static final double MAXVEL = 60;
     public static final double MAXACCEL = 60;
@@ -293,22 +293,23 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(MAXVEL, MAXACCEL, MAXANGVEL, MAXANGACCEL, TRACKWIDTH)
 
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-61, -36, Math.toRadians(0)))
-                        .forward(26)
-                        .waitSeconds(DELAY)
-                        .lineToLinearHeading(new Pose2d(-35, -56, Math.toRadians(-90)))
-                        .waitSeconds(DELAY)
-                        .lineToLinearHeading(new Pose2d(-35, -24, Math.toRadians(90)))
-                        .lineToLinearHeading(new Pose2d(-35, 50, Math.toRadians(90)))
-                        .waitSeconds(DELAY)
-                        .lineToLinearHeading(new Pose2d(-35, 0, Math.toRadians(-90)))
-                        .lineToLinearHeading(new Pose2d(-35, -56, Math.toRadians(-90)))
-                        .waitSeconds(DELAY)
-                        .lineToLinearHeading(new Pose2d(-35, -24, Math.toRadians(90)))
-                        .lineToLinearHeading(new Pose2d(-35, 50, Math.toRadians(90)))
-                        .waitSeconds(DELAY)
-                        .build()
-                );
+
+                        .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(11.25, 59.18, Math.toRadians(-89.52)))
+                                .lineTo(new Vector2d(11.46, 40.68))
+
+                                .strafeTo(new Vector2d(22.8, 40.68))
+
+                                .build()
+
+                        );
+        //Do the camera scan front
+
+
+
+
+
+
+
         return myBot;
     }
 
