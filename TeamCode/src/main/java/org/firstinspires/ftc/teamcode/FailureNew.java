@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 @Autonomous(preselectTeleOp = "FailureNew")
+@Disabled
 public class FailureNew extends LinearOpMode {
 
     public DcMotor frontLeft, frontRight, rearLeft, rearRight, armMotor;
